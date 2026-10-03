@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>De todos los que te queremos</title>
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital@1&family=Poppins:wght@300;400&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            /* ===== COLORES Y FUENTES (edita aquí) ===== */
+            :root {
+                --cream: #fffaf3;
+                --pink: #f8d7e3;
+                --blue: #d4e6f7;
+                --lilac: #e4d9f6;
+                --lav: #c9b8ec;
+                --ink: #3d3552;
+                --soft: #6f6685;
+                --acc: #b48be0;
+                --script: "Dancing Script", "Segoe Script", cursive;
+                --serif: "Playfair Display", Georgia, serif;
+                --sans: "Poppins", "Segoe UI", sans-serif;
+                --shadow: 0 12px 32px rgba(120, 100, 160, 0.16);
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: var(--sans);
+                font-weight: 300;
+                line-height: 1.8;
+                color: var(--ink);
+                overflow-x: hidden;
+                background: linear-gradient(
+                    180deg,
+                    var(--cream),
+                    #f1f1f4 50%,
+                    var(--pink)
+                );
+            }
+            section {
+                padding: clamp(50px, 9vw, 90px) 20px;
+            }
+            .wrap {
+                max-width: 820px;
+                margin: 0 auto;
+            }
+            h2 {
+                font-family: var(--script);
+                font-size: clamp(2rem, 6vw, 2.8rem);
+                text-align: center;
+                color: var(--acc);
+                margin-bottom: 24px;
+            }
+            .ph-t {
+                color: var(--soft);
+                font-style: italic;
+            }
+
+            /* Notas flotantes */
+            #notes {
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                overflow: hidden;
+                z-index: 0;
+            }
+            #notes span {
+                position: absolute;
+                bottom: -40px;
+                color: var(--lav);
+                opacity: 0.35;
+                animation: up linear infinite;
+            }
+            @keyframes up {
+                to {
+                    transform: translateY(-115vh) rotate(25deg);
+                    opacity: 0;
+                }
+            }
+            section {
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Placeholder de imagen: si la foto no carga, se elimina y queda el fondo */
+            .ph {
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                background: linear-gradient(135deg, var(--lilac), var(--blue));
+                color: var(--soft);
+                font-size: 0.8rem;
+            }
+            .ph img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.6s;
+            }
+            .ph:hover img {
+                transform: scale(1.07);
+            }
+
+            /* Teclas de piano (JS) */
+            .keys {
+                position: relative;
+                display: flex;
+                height: 70px;
+                max-width: 480px;
+                margin: 28px auto 0;
+                border-radius: 0 0 12px 12px;
+                overflow: hidden;
+                box-shadow: var(--shadow);
+            }
+            .keys .w {
+                flex: 1;
+                background: #fff;
+                border: 1px solid #e3dcef;
+                border-top: 0;
+            }
+            .keys .b {
+                position: absolute;
+                top: 0;
+                width: 4.6%;
+                height: 58%;
+                background: #4b4263;
+                border-radius: 0 0 4px 4px;
+                transform: translateX(-50%);
+            }
+
+            /* Portada */
+            .cover {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                background:
+                    radial-gradient(
+                        circle at 15% 15%,
+                        var(--pink),
+                        transparent 45%
+                    ),
+                    radial-gradient(
+                        circle at 85% 85%,
+                        var(--blue),
+                        transparent 45%
+                    );
+            }
+            .cover .ph {
+                width: min(240px, 62vw);
+                aspect-ratio: 1;
+                border-radius: 50%;
+                border: 7px solid #fff;
+                box-shadow: var(--shadow);
+                margin: 0 auto 22px;
+            }
+            .cover h1 {
+                font-family: var(--script);
+                font-size: clamp(2.6rem, 9.5vw, 5rem);
+                line-height: 1.1;
+            }
+            .cover h1 em {
+                font-style: normal;
+                color: var(--acc);
+            }
+            .cover .lead {
+                font-family: var(--serif);
+                font-style: italic;
+                color: var(--soft);
+                max-width: 480px;
+                margin: 10px auto 0;
+            }
+
+            /* Carta */
+            .letter {
+                background: #fffdf8;
+                border-radius: 6px 6px 22px 22px;
+                box-shadow: var(--shadow);
+                position: relative;
+                padding: clamp(26px, 6vw, 56px) clamp(22px, 6vw, 56px)
+                    clamp(26px, 6vw, 56px) clamp(34px, 7vw, 64px);
+                background-image: repeating-linear-gradient(
+                    transparent 0 33px,
+                    rgba(180, 139, 224, 0.13) 33px 34px
+                );
+            }
+            .letter::before {
+                content: "";
+                position: absolute;
+                left: clamp(14px, 4vw, 30px);
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: rgba(244, 160, 190, 0.5);
+            }
+            .letter p {
+                margin-bottom: 34px;
+                line-height: 34px;
+            }
+            .letter .to {
+                font-family: var(--script);
+                font-size: 1.9rem;
+                color: var(--acc);
+                line-height: 1.2;
+                margin-bottom: 12px;
+            }
+            .letter .sign {
+                font-family: var(--script);
+                font-size: 1.8rem;
+                text-align: right;
+                line-height: 1.2;
+            }
+
+            /* Música */
+            .genres {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+            }
+            .genre {
+                padding: 26px 20px;
+                border-radius: 22px;
+                text-align: center;
+                box-shadow: var(--shadow);
+                transition: transform 0.4s;
+            }
+            .genre:hover {
+                transform: translateY(-6px);
+            }
+            .genre:nth-child(1) {
+                background: linear-gradient(160deg, #fff, var(--blue));
+            }
+            .genre:nth-child(2) {
+                background: linear-gradient(160deg, #fff, var(--pink));
+            }
+            .genre:nth-child(3) {
+                background: linear-gradient(160deg, #fff, var(--lilac));
+            }
+            .genre .ic {
+                font-size: 2.4rem;
+                line-height: 1;
+            }
+            .genre h3 {
+                font-family: var(--script);
+                font-size: 1.7rem;
+                line-height: 1.3;
+            }
+            .genre small {
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: var(--soft);
+                font-size: 0.68rem;
+            }
+            .genre p {
+                margin-top: 8px;
+                font-size: 0.92rem;
+                line-height: 1.6;
+            }
+
+            /* Galería (4 fotos) */
+            .gallery {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+            .pol {
+                background: #fff;
+                padding: 9px 9px 12px;
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+                transition: transform 0.4s;
+            }
+            .pol:nth-child(odd) {
+                transform: rotate(-2deg);
+            }
+            .pol:nth-child(even) {
+                transform: rotate(2deg);
+            }
+            .pol:hover {
+                transform: rotate(0) scale(1.05);
+            }
+            .pol .ph {
+                aspect-ratio: 1;
+                border-radius: 4px;
+            }
+            .pol figcaption {
+                font-family: var(--script);
+                font-size: 1.15rem;
+                text-align: center;
+                margin-top: 6px;
+                line-height: 1.3;
+            }
+
+            /* Cierre */
+            .close {
+                text-align: center;
+                background: linear-gradient(180deg, transparent, var(--lilac));
+            }
+            .close .final {
+                font-family: var(--script);
+                font-size: clamp(2rem, 6.5vw, 3.2rem);
+                line-height: 1.25;
+            }
+            .quotes {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                margin: 26px 0;
+            }
+            .q {
+                padding: 26px 20px;
+                border-radius: 20px;
+                font-family: var(--serif);
+                font-style: italic;
+                box-shadow: var(--shadow);
+                transition: transform 0.4s;
+            }
+            .q:hover {
+                transform: rotate(-1.5deg) translateY(-4px);
+            }
+            .q:nth-child(1) {
+                background: var(--pink);
+            }
+            .q:nth-child(2) {
+                background: var(--blue);
+            }
+            .sig {
+                font-family: var(--script);
+                font-size: 2.3rem;
+                color: var(--acc);
+            }
+            .last {
+                width: min(230px, 60vw);
+                aspect-ratio: 4/5;
+                margin: 22px auto;
+                border: 7px solid #fff;
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+                transform: rotate(-2deg);
+            }
+
+            /* Animaciones y responsive */
+            .reveal {
+                opacity: 0;
+                transform: translateY(30px);
+                transition:
+                    opacity 0.9s,
+                    transform 0.9s;
+            }
+            .reveal.in {
+                opacity: 1;
+                transform: none;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .reveal {
+                    opacity: 1;
+                    transform: none;
+                }
+                #notes {
+                    display: none;
+                }
+            }
+            @media (max-width: 700px) {
+                .genres,
+                .quotes {
+                    grid-template-columns: 1fr;
+                }
+                .gallery {
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                }
+                .letter p {
+                    line-height: 30px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="notes" aria-hidden="true"></div>
+
+        <section class="cover">
+            <div class="wrap reveal">
+                <figure class="ph">
+                    <img
+                        src="/public/LaJoce.jpeg"
+                        alt=""
+                        onerror="this.remove()"
+                    />
+                </figure>
+                <h1>De todos los que <em>te queremos</em></h1>
+                <div class="keys"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap reveal">
+                <h2>Una carta para ti</h2>
+                <div class="letter">
+                    <div class="to">Whats up Joce,</div>
+
+                    <p class="ph-t">
+                        Hola buenas, como sabes no soy de escribir cartas pero
+                        te hice una pagina web xd
+                    </p>
+                    <p class="ph-t">
+                        Quiero que sepas lo mucho que se te quiere, eres una muy
+                        buena muchacha y una muy buena persona, una gran amiga y
+                        compañera
+                    </p>
+                    <p class="ph-t">
+                        Ojala volvernos a ver uno de estos dias y platicar un
+                        rato de ti y como haz estad, cuidate mucho y pasatela
+                        muy bien en tu dia especial
+                    </p>
+
+                    <div class="sign">Alonso</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap reveal">
+                <h2>Nuestros recuerdos</h2>
+                <div class="gallery">
+                    <figure class="pol">
+                        <div class="ph">
+                            <img
+                                src="public/DownGirl.jpeg"
+                                alt="Recuerdo 1"
+                                onerror="this.remove()"
+                            />
+                        </div>
+                        <figcaption>DownGirl (Chica del bajo)</figcaption>
+                    </figure>
+                    <figure class="pol">
+                        <div class="ph">
+                            <img
+                                src="public/Despistada.jpeg"
+                                alt="Recuerdo 2"
+                                onerror="this.remove()"
+                            />
+                        </div>
+                        <figcaption>Te agarre despistada</figcaption>
+                    </figure>
+                    <figure class="pol">
+                        <div class="ph">
+                            <img
+                                src="public/Waos.jpeg"
+                                alt="Recuerdo 3"
+                                onerror="this.remove()"
+                            />
+                        </div>
+                        <figcaption>No more paper</figcaption>
+                    </figure>
+                    <figure class="pol">
+                        <div class="ph">
+                            <img
+                                src="public/Legendaria.jpeg"
+                                alt="Recuerdo 4"
+                                onerror="this.remove()"
+                            />
+                        </div>
+                        <figcaption>Legendaria</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section class="close">
+            <div class="wrap reveal">
+                <div class="quotes">
+                    <div class="q">“Sin inportar el timepo que pase”</div>
+                    <div class="q">
+                        “Siempre estaras en una parte de mi corazon”
+                    </div>
+                </div>
+                <div class="final">Fuerza Leonaaaaaaa</div>
+                <figure class="ph last">
+                    <img
+                        src="public/fuerzaleona.png"
+                        alt=""
+                        onerror="this.remove()"
+                    />
+                </figure>
+                <div class="sig">Aqui tu compa el Alonso ♪</div>
+                <div class="keys"></div>
+            </div>
+        </section>
+
+        <script>
+            // Teclas de piano
+            document.querySelectorAll(".keys").forEach((el) => {
+                for (let i = 0; i < 14; i++) {
+                    const k = document.createElement("div");
+                    k.className = "w";
+                    el.appendChild(k);
+                }
+                [0, 1, 3, 4, 5, 7, 8, 10, 11, 12].forEach((i) => {
+                    const b = document.createElement("div");
+                    b.className = "b";
+                    b.style.left = ((i + 1) / 14) * 100 + "%";
+                    el.appendChild(b);
+                });
+            });
+            // Notas flotantes
+            const n = document.getElementById("notes"),
+                s = ["♪", "♫", "♩", "♬"];
+            for (let i = 0; i < 10; i++) {
+                const e = document.createElement("span");
+                e.textContent = s[i % 4];
+                e.style.cssText = `left:${Math.random() * 96}%;font-size:${18 + Math.random() * 24}px;animation-duration:${22 + Math.random() * 22}s;animation-delay:-${Math.random() * 40}s`;
+                n.appendChild(e);
+            }
+            // Aparición al hacer scroll
+            const io = new IntersectionObserver(
+                (r) =>
+                    r.forEach((e) => {
+                        if (e.isIntersecting) {
+                            e.target.classList.add("in");
+                            io.unobserve(e.target);
+                        }
+                    }),
+                { threshold: 0.12 },
+            );
+            document.querySelectorAll(".reveal").forEach((e) => io.observe(e));
+        </script>
+    </body>
+</html>
